@@ -1,29 +1,17 @@
-using Plots
-plotlyjs()
+using InteractiveChaos
+using DynamicalSystems, GLMakie
+using OrdinaryDiffEq
 
-include("boids.jl")
+ds = Systems.henonheiles()  # 4D chaotic/regular continuous system
 
-element = Element()
+u0s = [[0.0, -0.25, 0.42081, 0.0],
+[0.0, 0.1, 0.5, 0.0],
+[0.0, -0.31596, 0.354461, 0.0591255]]
 
+diffeq = (alg = Vern9(), dtmax = 0.01)
+idxs = (1, 2, 4)
+colors = ["#233B43", "#499cbf", "#E84646"]
 
-
-
-# function step!(elem::Element)
-#     dx = rand(1:5)
-#     dy = rand(1:5)
-#     dz = rand(1:5)
-#     elem.x += dx * 0.01
-#     elem.y += dy * 0.01
-#     elem.z += dz * 0.01
-#     Point3f(elem.x, elem.y, elem.z)
-# end
-
-# element = Element()
-
-# points = Observable(Point3f[])
-# colors = Observable(Int[])
-
-# for i in 1:100
-#     meshscatter(step!(element), markersize = 0.1)
-#     display()
-# end
+figure, obs = interactive_evolution(
+    ds, u0s; idxs, tail = 10000, diffeq, colors
+)
