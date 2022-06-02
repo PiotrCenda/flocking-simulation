@@ -1,12 +1,3 @@
-# Base.@kwdef mutable struct Element
-#     id::Int64
-#     x::Float64 = rand(1:1000)
-#     y::Float64 = rand(1:1000)
-#     z::Float64 = rand(1:1000)
-#     velocity::Float64 = rand(20:30)
-#     acceleration::Float64 = rand(1:5)
-# end
-
 # Boid struct 
 mutable struct Boid
     id
