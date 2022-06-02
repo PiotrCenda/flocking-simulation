@@ -6,6 +6,11 @@ mutable struct Boid
     acceleration
 end
 
+# Forces parameters
+perceptionRadiusMultiplier = 2
+maxForce = 3.
+maxSpeed = 7.
+
 # limit the magnitude of a 2-d Array to lim
 function set_limit!(v::Array, lim::Float64)
     n = sqrt(sum(v.^2))
@@ -30,7 +35,7 @@ end
 ## fly updates the position and velocity of each boid
 # each boid flaps ones per fly update
 function fly!(boid::Boid, flock::Vector{Boid}, alignValue, separationValue, cohesionValue)
-    maxSpeed = 4.
+    # maxSpeed = 5.
     flap!(boid, flock, alignValue, separationValue, cohesionValue)
     boid.position += boid.velocity
     boid.velocity += boid.acceleration
@@ -40,9 +45,9 @@ end
 
 # align Boid to its flock 
 function align!(b::Boid, flock::Vector{Boid})
-    maxForce = 1.
-    maxSpeed = 4.
-    perceptionRadius = 50
+    # maxForce = 2.
+    # maxSpeed = 5.
+    perceptionRadius = 50 * perceptionRadiusMultiplier
     steering = zeros(size(b.velocity))
     total = 0
     for boid in flock
@@ -63,9 +68,9 @@ end
 
 # seperate each flock from its flock s.t. they dont collide
 function seperate!(b::Boid, flock::Vector{Boid})
-    maxForce = 1.
-    maxSpeed = 4.
-    perceptionRadius = 50
+    # maxForce = 2.
+    # maxSpeed = 5.
+    perceptionRadius = 50 * perceptionRadiusMultiplier
     steering = zeros(size(b.velocity))
     total = 0
     for boid in flock
@@ -87,9 +92,9 @@ end
 
 # follow the flocks average position 
 function cohese!(b::Boid, flock::Vector{Boid})
-    maxForce = 1.
-    maxSpeed = 4.
-    perceptionRadius = 100
+    # maxForce = 2.
+    # maxSpeed = 5.
+    perceptionRadius = 100 * perceptionRadiusMultiplier
     steering = zeros(size(b.velocity))
     total = 0
     for boid in flock
