@@ -7,10 +7,10 @@ mutable struct Boid
 end
 
 # Parameters
-edgeRadius = 28
-perceptionRadiusMultiplier = 1.
+edgeRadius = 50
+perceptionRadiusMultiplier = 1.5
 maxForce = 3.
-maxSpeed = 8.
+maxSpeed = 10.
 
 # limit the magnitude of a 2-d Array to lim
 function set_limit!(v::Array, lim::Float64)
@@ -88,68 +88,53 @@ function seperate!(b::Boid, flock::Vector{Boid}, axis_limit)
 
     # custom edge separation
     if (b.position[1] - axis_limit) < edgeRadius
-        edge1 = [[1000, i, j] for i in -edgeRadius+b.position[2]:10:edgeRadius+b.position[2], j in -edgeRadius+b.position[3]:10:edgeRadius+b.position[3]]
-        for boid in edge1
-            dist = b.position - boid
-            if norm(dist) < perceptionRadius
-                diff = dist / (norm(dist)^2)
-                steering += diff
-                total +=1
-            end
+        plane_dist = [b.position[1] - axis_limit, 0, 0]
+        if norm(plane_dist) < perceptionRadius
+            diff = plane_dist / (norm(plane_dist)^2)
+            steering += diff.*100
+            total +=1
         end
-    elseif (b.position[1] + axis_limit) < edgeRadius
-        edge2 = [[-1000, i, j] for i in -edgeRadius+b.position[2]:10:edgeRadius+b.position[2], j in -edgeRadius+b.position[3]:10:edgeRadius+b.position[3]]
-        for boid in edge2
-            dist = b.position - boid
-            if norm(dist) < perceptionRadius
-                diff = dist / (norm(dist)^2)
-                steering += diff
-                total +=1
-            end
+    end
+    if (b.position[1] + axis_limit) < edgeRadius
+        plane_dist = [b.position[1] + axis_limit, 0, 0]
+        if norm(plane_dist) < perceptionRadius
+            diff = plane_dist / (norm(plane_dist)^2)
+            steering += diff.*100
+            total +=1
         end
     end
 
     if (b.position[2] - axis_limit) < edgeRadius
-        edge3 = [[i, 1000, j] for i in -edgeRadius+b.position[1]:10:edgeRadius+b.position[1], j in -edgeRadius+b.position[3]:10:edgeRadius+b.position[3]]
-        for boid in edge3
-            dist = b.position - boid
-            if norm(dist) < perceptionRadius
-                diff = dist / (norm(dist)^2)
-                steering += diff
-                total +=1
-            end
+        plane_dist = [0, b.position[2] - axis_limit, 0]
+        if norm(plane_dist) < perceptionRadius
+            diff = plane_dist / (norm(plane_dist)^2)
+            steering += diff.*100
+            total +=1
         end
-    elseif (b.position[2] + axis_limit) < edgeRadius
-        edge4 = [[i, -1000, j] for i in -edgeRadius+b.position[1]:10:edgeRadius+b.position[1], j in -edgeRadius+b.position[3]:10:edgeRadius+b.position[3]]
-        for boid in edge4
-            dist = b.position - boid
-            if norm(dist) < perceptionRadius
-                diff = dist / (norm(dist)^2)
-                steering += diff
-                total +=1
-            end
+    end
+    if (b.position[2] + axis_limit) < edgeRadius
+        plane_dist = [0, b.position[2] + axis_limit, 0]
+        if norm(plane_dist) < perceptionRadius
+            diff = plane_dist / (norm(plane_dist)^2)
+            steering += diff.*100
+            total +=1
         end
     end
 
     if (b.position[3] - axis_limit) < edgeRadius
-        edge5 = [[i, j, 1000] for i in -edgeRadius+b.position[1]:10:edgeRadius+b.position[1], j in -edgeRadius+b.position[2]:10:edgeRadius+b.position[2]]
-        for boid in edge5
-            dist = b.position - boid
-            if norm(dist) < perceptionRadius
-                diff = dist / (norm(dist)^2)
-                steering += diff
-                total +=1
-            end
+        plane_dist = [0, 0, b.position[3] - axis_limit]
+        if norm(plane_dist) < perceptionRadius
+            diff = plane_dist / (norm(plane_dist)^2)
+            steering += diff.*100
+            total +=1
         end
-    elseif (b.position[3] + axis_limit) < edgeRadius
-        edge6 = [[i, j, -1000] for i in -edgeRadius+b.position[1]:10:edgeRadius+b.position[1], j in -edgeRadius+b.position[2]:10:edgeRadius+b.position[2]]
-        for boid in edge6
-            dist = b.position - boid
-            if norm(dist) < perceptionRadius
-                diff = dist / (norm(dist)^2)
-                steering += diff
-                total +=1
-            end
+    end
+    if (b.position[3] + axis_limit) < edgeRadius
+        plane_dist = [0, 0, b.position[3] + axis_limit]
+        if norm(plane_dist) < perceptionRadius
+            diff = plane_dist / (norm(plane_dist)^2)
+            steering += diff.*100
+            total +=1
         end
     end
     
@@ -188,65 +173,3 @@ function cohese!(b::Boid, flock::Vector{Boid})
     end
     return steering       
 end
-
-
-# Edge testing
-# if (b.position[1] - axis_limit) < edgeRadius
-#     size = b.position[1] - axis_limit
-#     for i in (-size+b.position[2]):(size+b.position[2]), j in (-size+b.position[3]):(size+b.position[3])
-#         dist = [-axis_limit + b.position[1], i, j]
-#         diff = dist / (norm(dist)^2)
-#         steering += diff
-#         total +=1
-#     end
-# end
-
-# if (b.position[1] + axis_limit) < edgeRadius
-#     size = b.position[1] + axis_limit
-#     for i in (-size+b.position[2]):10:(size+b.position[2]), j in (-size+b.position[3]):10:(size+b.position[3])
-#         dist = [-axis_limit - b.position[1], i, j]
-#         diff = dist / (norm(dist)^2)
-#         steering += diff
-#         total +=1
-#     end
-# end
-
-# if (b.position[2] - axis_limit) < edgeRadius
-#     size = b.position[2] - axis_limit
-#     for i in (-size+b.position[1]):10:(size+b.position[1]), j in (-size+b.position[3]):10:(size+b.position[3])
-#         dist = [i, -axis_limit + b.position[2], j]
-#         diff = dist / (norm(dist)^2)
-#         steering += diff
-#         total +=1
-#     end
-# end
-
-# if (b.position[2] + axis_limit) < edgeRadius
-#     size = b.position[2] + axis_limit
-#     for i in (-size+b.position[1]):10:(size+b.position[1]), j in (-size+b.position[3]):10:(size+b.position[3])
-#         dist = [i, -axis_limit - b.position[2], j]
-#         diff = dist / (norm(dist)^2)
-#         steering += diff
-#         total +=1
-#     end
-# end
-
-# if (b.position[3] - axis_limit) < edgeRadius
-#     size = b.position[3] - axis_limit
-#     for i in (-size+b.position[1]):10:(size+b.position[1]), j in (-size+b.position[2]):10:(size+b.position[2])
-#         dist = [i, j, -axis_limit + b.position[3]]
-#         diff = dist / (norm(dist)^2)
-#         steering += diff
-#         total +=1
-#     end
-# end
-
-# if (b.position[3] + axis_limit) < edgeRadius
-#     size = b.position[3] + axis_limit
-#     for i in (-size+b.position[1]):10:(size+b.position[1]), j in (-size+b.position[2]):10:(size+b.position[2])
-#         dist = [i, j, -axis_limit - b.position[1]]
-#         diff = dist / (norm(dist)^2)
-#         steering += diff
-#         total +=1
-#     end
-# end
