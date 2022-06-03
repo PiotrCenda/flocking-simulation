@@ -9,8 +9,8 @@ end
 # Parameters
 edgeRadius = 50
 perceptionRadiusMultiplier = 1.5
-maxForce = 3.
-maxSpeed = 10.
+maxForce = 5.
+maxSpeed = 15.
 
 # limit the magnitude of a 2-d Array to lim
 function set_limit!(v::Array, lim::Float64)
