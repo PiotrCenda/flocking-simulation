@@ -7,10 +7,10 @@ mutable struct Boid
 end
 
 # Parameters
-edgeRadius = 50
-perceptionRadiusMultiplier = 1.5
+edgeRadius = 25
+perceptionRadiusMultiplier = 1.8
 maxForce = 5.
-maxSpeed = 15.
+maxSpeed = 20.
 
 # limit the magnitude of a 2-d Array to lim
 function set_limit!(v::Array, lim::Float64)
