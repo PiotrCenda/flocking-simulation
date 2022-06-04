@@ -11,8 +11,8 @@ max_force = 3.5
 max_speed = 23.
 edge_radius = 250
 edgeValue = 1.2
-max_edge_force = max_force * 1.8
-max_edge_speed = max_speed * 1.8
+max_edge_force = max_force * 0.8
+max_edge_speed = max_speed * 0.8
 
 # limit the magnitude of a 2-d Array to lim
 function set_limit!(v::Array, lim::Float64)
@@ -34,7 +34,7 @@ function flap!(boid::Boid, flock::Vector{Boid}, alignValue, separationValue, coh
     boid.acceleration += seperate!(boid, flock, separate_perception_radius) .* separationValue
     boid.acceleration += cohese!(boid, flock, cohese_perception_radius) .* cohesionValue
     boid.acceleration += egde!(boid, axis_limit) .* edgeValue
-    boid.acceleration += egde!(boid, axis_limit+(edge_radius*0.95)) .* (edgeValue*3)
+    boid.acceleration += egde!(boid, axis_limit+(edge_radius*0.5)) .* (edgeValue*5)
 end
 
 ## fly updates the position and velocity of each boid
