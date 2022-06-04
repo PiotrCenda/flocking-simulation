@@ -1,10 +1,4 @@
 using GLMakie, LinearAlgebra
-using GLMakie.GLFW
-using GLMakie: to_native
-
-# TODO: Try CUDA computation
-# TODO: Add sliders for max force, max speed and perception radious
-# TODO: Maybeeeeee try make .exe 
 
 # Include file with movement algorithm
 include("boids.jl")
@@ -12,7 +6,7 @@ include("boids.jl")
 # Make boids
 axis_limit = 1500;
 generation_area = 300
-numBoids = 500
+numBoids = 400
 flock = [Boid(i, rand(-generation_area:generation_area, 3), randn(3).*3, randn(3).*2) for i=1:numBoids]
 points = Observable([Point3f(boid.position) for boid in flock])
 

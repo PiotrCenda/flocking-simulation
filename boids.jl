@@ -8,7 +8,7 @@ end
 
 # Parameters
 max_force = 3.5
-max_speed = 23.
+max_speed = 25.
 edge_radius = 250
 edgeValue = 1.2
 max_edge_force = max_force * 0.8
